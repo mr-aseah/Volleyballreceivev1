@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Volleyball Receiving Check</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #cbd5e1;
+      --soft: #e2e8f0;
+      --accent: #0f172a;
+      --accent-2: #334155;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    @media (min-width: 980px) {
+      .grid { grid-template-columns: 1fr 1fr; }
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--soft);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+    }
+    .eyebrow {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: 34px; margin-top: 6px; }
+    h2 { font-size: 28px; margin-top: 6px; }
+    h3 { font-size: 15px; margin-bottom: 6px; }
+    .subtext {
+      margin-top: 10px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .stack { display: grid; gap: 18px; margin-top: 24px; }
+    .field label, .section-title {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #334155;
+    }
+    input {
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      outline: none;
+      font-size: 15px;
+    }
+    input:focus {
+      border-color: #64748b;
+      box-shadow: 0 0 0 3px rgba(100, 116, 139, 0.12);
+    }
+    .two-col {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 680px) {
+      .two-col { grid-template-columns: 1fr 1fr; }
+    }
+    .btn-grid-2, .btn-grid-3, .btn-grid-exp {
+      display: grid;
+      gap: 10px;
+    }
+    .btn-grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .btn-grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .btn-grid-exp { grid-template-columns: 1fr; }
+    @media (min-width: 680px) {
+      .btn-grid-exp { grid-template-columns: 1fr 1fr 1fr; }
+    }
+    .choice-btn {
+      border: 1px solid var(--border);
+      background: white;
+      color: #334155;
+      border-radius: 16px;
+      padding: 14px 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.15s ease;
+      text-align: center;
+    }
+    .choice-btn:hover { border-color: #94a3b8; }
+    .choice-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    .choice-btn.left { text-align: left; }
+    .empty {
+      min-height: 220px;
+      border: 1px dashed var(--border);
+      background: #f8fafc;
+      border-radius: 24px;
+      padding: 20px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+    }
+    .feedback-top {
+      background: #f8fafc;
+      border-radius: 24px;
+      padding: 18px;
+    }
+    .mini-card {
+      background: white;
+      border: 1px solid var(--soft);
+      border-radius: 18px;
+      padding: 14px;
+      margin-top: 14px;
+    }
+    .feedback-blocks {
+      display: grid;
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .feedback-block p {
+      color: var(--muted);
+      line-height: 1.55;
+      margin-top: 4px;
+    }
+    .actions {
+      margin-top: 18px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .primary {
+      border: 0;
+      background: var(--accent);
+      color: white;
+      padding: 13px 18px;
+      border-radius: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .primary:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .notice {
+      background: #f1f5f9;
+      color: #334155;
+      padding: 12px 14px;
+      border-radius: 16px;
+      font-size: 14px;
+    }
+    svg { width: 100%; height: auto; display: block; }
+    .muted { color: var(--muted); }
+    .small { font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="grid">
+      <section class="card">
+        <div class="eyebrow">Volleyball</div>
+        <h1>Receiving Check</h1>
+        <p class="subtext">Observe the receive, make sense of what happened, then choose one thing to work on next.</p>
+
+        <div class="stack">
+          <div class="field">
+            <label for="playerName">Player Name</label>
+            <input id="playerName" placeholder="Enter player name" />
+          </div>
+
+          <div class="two-col">
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" type="email" placeholder="student@email.com" />
+            </div>
+            <div class="field">
+              <label for="buddy">Buddy / Coach</label>
+              <input id="buddy" placeholder="Observer name" />
+            </div>
+          </div>
+
+          <div>
+            <div class="section-title">What happened?</div>
+            <div class="stack">
+              <div>
+                <div class="small muted" style="margin-bottom:8px;">Was the player in position to receive?</div>
+                <div class="btn-grid-3" id="positionBtns"></div>
+              </div>
+              <div>
+                <div class="small muted" style="margin-bottom:8px;">What was the pass height?</div>
+                <div class="btn-grid-3" id="heightBtns"></div>
+              </div>
+              <div>
+                <div class="small muted" style="margin-bottom:8px;">How playable was the ball?</div>
+                <div class="btn-grid-3" id="playableBtns"></div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="section-title">What do you want to improve?</div>
+            <div class="small muted" style="margin-bottom:8px;">Position = move and get ready • Height = give the ball useful lift • Playable = keep the ball under control for the next touch</div>
+            <div class="btn-grid-exp" id="experimentBtns"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="eyebrow">Feedback Card</div>
+        <h2>What • So What • Now What</h2>
+        <div id="feedbackArea" style="margin-top:18px;"></div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const outcomeFeedback = {
+      not_low_notplayable: {
+        title: "Get into position earlier",
+        meaning: "The player was not fully in position, the pass stayed low, and the ball was hard to keep in play.",
+        experiment: "Move earlier to the ball first, then focus on lifting the pass enough to make it playable.",
+        goal: "Try 3 receives where you get into position earlier and lift the ball higher.",
+        position: "not yet",
+        height: "too low",
+        playable: "not playable",
+      },
+      not_low_someplay: {
+        title: "Closer, but still needs lift",
+        meaning: "The player was late into position, and the pass did not rise enough even though it was partly playable.",
+        experiment: "Get set earlier and give the ball a little more lift on contact.",
+        goal: "Try 3 receives that rise to a more useful height.",
+        position: "not yet",
+        height: "too low",
+        playable: "somewhat playable",
+      },
+      not_low_playable: {
+        title: "Playable, but movement can improve",
+        meaning: "The ball stayed playable, but the player was late and the pass height was still low.",
+        experiment: "Move earlier so you can get more comfortably behind or under the ball before contact.",
+        goal: "Try 3 receives with earlier movement and a higher pass.",
+        position: "not yet",
+        height: "too low",
+        playable: "playable",
+      },
+
+      not_good_notplayable: {
+        title: "Height is there — control next",
+        meaning: "The pass rose to a useful height, but because the player was late, the ball was still difficult to use.",
+        experiment: "Move earlier and settle before contact so the pass becomes more playable.",
+        goal: "Try 3 receives that reach a good height and stay playable.",
+        position: "not yet",
+        height: "good height",
+        playable: "not playable",
+      },
+      not_good_someplay: {
+        title: "Almost there",
+        meaning: "The player was slightly late, but the pass had workable height and was nearly playable.",
+        experiment: "Get into position sooner so the same pass becomes easier for the next touch.",
+        goal: "Try 3 receives where you arrive earlier and keep the same pass height.",
+        position: "not yet",
+        height: "good height",
+        playable: "somewhat playable",
+      },
+      not_good_playable: {
+        title: "Usable receive despite late movement",
+        meaning: "The ball was playable and reached a good height, but earlier movement would make this more consistent.",
+        experiment: "Keep the same contact, but move earlier to the ball.",
+        goal: "Try to repeat 3 playable receives with earlier positioning.",
+        position: "not yet",
+        height: "good height",
+        playable: "playable",
+      },
+
+      not_high_notplayable: {
+        title: "Ball rises, but not with control",
+        meaning: "The player was late and the pass went too high without becoming clearly playable.",
+        experiment: "Move earlier and calm the contact so the ball rises to a useful height instead of popping up too much.",
+        goal: "Try 3 receives with earlier positioning and a steadier pass height.",
+        position: "not yet",
+        height: "too high",
+        playable: "not playable",
+      },
+      not_high_someplay: {
+        title: "Too much lift, not enough control",
+        meaning: "The pass went too high and was only partly playable because the player was not set early enough.",
+        experiment: "Get into position sooner and aim for a calmer, more controlled pass.",
+        goal: "Try 3 receives with a lower, more useful height.",
+        position: "not yet",
+        height: "too high",
+        playable: "somewhat playable",
+      },
+      not_high_playable: {
+        title: "Playable, but cleaner timing will help",
+        meaning: "The ball stayed playable, but the pass rose higher than needed and the player was still late into position.",
+        experiment: "Move earlier and try to keep the pass at a more useful height.",
+        goal: "Try 3 playable receives with a lower, steadier pass.",
+        position: "not yet",
+        height: "too high",
+        playable: "playable",
+      },
+
+      almost_low_notplayable: {
+        title: "Nearly there — add lift and control",
+        meaning: "The player was almost in position, but the pass stayed low and did not become playable.",
+        experiment: "Set your body earlier and focus on lifting the ball into a usable path.",
+        goal: "Try 3 receives with a higher pass and better playability.",
+        position: "almost there",
+        height: "too low",
+        playable: "not playable",
+      },
+      almost_low_someplay: {
+        title: "A little more lift needed",
+        meaning: "The player was close to being set, but the pass was still low and only partly playable.",
+        experiment: "Get settled just a bit earlier and lift the ball more on contact.",
+        goal: "Try 3 receives with more useful height.",
+        position: "almost there",
+        height: "too low",
+        playable: "somewhat playable",
+      },
+      almost_low_playable: {
+        title: "Playable, but still low",
+        meaning: "The receive stayed playable, but the pass height was lower than ideal.",
+        experiment: "Keep the ball in play, but try to give it more height for the next touch.",
+        goal: "Try 3 playable receives with better height.",
+        position: "almost there",
+        height: "too low",
+        playable: "playable",
+      },
+
+      almost_good_notplayable: {
+        title: "Good height — make it usable",
+        meaning: "The pass reached a good height, but the ball still was not playable enough for the next touch.",
+        experiment: "Focus on cleaner contact so the ball stays more controlled.",
+        goal: "Try 3 receives with the same height but better playability.",
+        position: "almost there",
+        height: "good height",
+        playable: "not playable",
+      },
+      almost_good_someplay: {
+        title: "Close to a strong receive",
+        meaning: "The player was almost in position, the pass had good height, and the ball was nearly playable.",
+        experiment: "Set early and aim for cleaner, steadier contact.",
+        goal: "Try 3 receives that are clearly playable.",
+        position: "almost there",
+        height: "good height",
+        playable: "somewhat playable",
+      },
+      almost_good_playable: {
+        title: "Good receive",
+        meaning: "The player got close to the ball well enough, the pass had good height, and it stayed playable.",
+        experiment: "Try to repeat the same movement and contact again.",
+        goal: "Try to repeat 3 similar receives in a row.",
+        position: "almost there",
+        height: "good height",
+        playable: "playable",
+      },
+
+      almost_high_notplayable: {
+        title: "Height without enough control",
+        meaning: "The pass rose too high and still was not playable enough for the next touch.",
+        experiment: "Keep moving early, but calm the contact so the ball does not pop up too much.",
+        goal: "Try 3 receives with a lower, more useful height.",
+        position: "almost there",
+        height: "too high",
+        playable: "not playable",
+      },
+      almost_high_someplay: {
+        title: "Too high and only partly usable",
+        meaning: "The pass rose higher than needed and was only somewhat playable.",
+        experiment: "Try a steadier contact so the ball reaches a more useful height.",
+        goal: "Try 3 receives that are lower and more controlled.",
+        position: "almost there",
+        height: "too high",
+        playable: "somewhat playable",
+      },
+      almost_high_playable: {
+        title: "Playable, but can be calmer",
+        meaning: "The ball stayed playable, but the pass height was higher than needed.",
+        experiment: "Keep the same movement, but aim for a calmer pass height.",
+        goal: "Try 3 playable receives with a lower, steadier path.",
+        position: "almost there",
+        height: "too high",
+        playable: "playable",
+      },
+
+      yes_low_notplayable: {
+        title: "In position — now add lift",
+        meaning: "The player got into position, but the pass stayed too low and was not playable.",
+        experiment: "Keep the same movement, but give the ball more useful lift on contact.",
+        goal: "Try 3 receives with more height and better playability.",
+        position: "yes",
+        height: "too low",
+        playable: "not playable",
+      },
+      yes_low_someplay: {
+        title: "Good position, but pass is still low",
+        meaning: "The player was ready, but the ball did not rise enough even though it stayed partly playable.",
+        experiment: "Keep getting into position and focus on making the pass rise more.",
+        goal: "Try 3 receives with better pass height.",
+        position: "yes",
+        height: "too low",
+        playable: "somewhat playable",
+      },
+      yes_low_playable: {
+        title: "Playable, but needs more height",
+        meaning: "The player was ready and kept the ball playable, but the pass stayed lower than ideal.",
+        experiment: "Keep the same control and add a little more lift.",
+        goal: "Try 3 playable receives at a better height.",
+        position: "yes",
+        height: "too low",
+        playable: "playable",
+      },
+
+      yes_good_notplayable: {
+        title: "Position and height are there — improve playability",
+        meaning: "The player was ready and the pass height was useful, but the ball still was not playable enough.",
+        experiment: "Focus on cleaner contact so the next player can use the ball.",
+        goal: "Try 3 receives with the same height but better playability.",
+        position: "yes",
+        height: "good height",
+        playable: "not playable",
+      },
+      yes_good_someplay: {
+        title: "Nearly a strong receive",
+        meaning: "The player was ready, the pass had good height, and the ball was partly playable.",
+        experiment: "Keep the same movement and make the contact a little cleaner.",
+        goal: "Try 3 receives that become clearly playable.",
+        position: "yes",
+        height: "good height",
+        playable: "somewhat playable",
+      },
+      yes_good_playable: {
+        title: "Strong receive",
+        meaning: "The player was in position, the pass had good height, and the ball stayed playable for the next touch.",
+        experiment: "Try to repeat the same movement and contact again.",
+        goal: "Try to repeat 3 strong receives in a row.",
+        position: "yes",
+        height: "good height",
+        playable: "playable",
+      },
+
+      yes_high_notplayable: {
+        title: "Ready, but the pass pops up too much",
+        meaning: "The player was in position, but the pass rose too high and still was not playable enough.",
+        experiment: "Keep the same movement, but make the contact calmer so the ball reaches a more useful height.",
+        goal: "Try 3 receives with lower, steadier height.",
+        position: "yes",
+        height: "too high",
+        playable: "not playable",
+      },
+      yes_high_someplay: {
+        title: "Usable, but too high",
+        meaning: "The player was ready and the ball stayed somewhat playable, but the pass rose higher than needed.",
+        experiment: "Keep the receive under control and aim for a calmer pass height.",
+        goal: "Try 3 receives with a lower, more useful height.",
+        position: "yes",
+        height: "too high",
+        playable: "somewhat playable",
+      },
+      yes_high_playable: {
+        title: "Playable receive — make it more efficient",
+        meaning: "The player was in position and kept the ball playable, but the pass still rose higher than needed.",
+        experiment: "Try to keep the same playability while lowering the pass to a more useful height.",
+        goal: "Try 3 playable receives with a steadier, lower pass height.",
+        position: "yes",
+        height: "too high",
+        playable: "playable",
+      },
+    };
+
+    const reflectionPrompts = {
+      position: "What helped you move into position earlier this time?",
+      height: "What helped you give the pass a more useful height?",
+      playable: "What helped you keep the ball more playable for the next touch?",
+    };
+
+    const experimentLabels = {
+      position: "Better position",
+      height: "Better pass height",
+      playable: "More playable ball",
+    };
+
+    const form = {
+      playerName: "",
+      email: "",
+      buddy: "",
+      position: "",
+      height: "",
+      playable: "",
+      experiment: "",
+      sent: false,
+    };
+
+    const positionOptions = [["not", "Not yet"], ["almost", "Almost there"], ["yes", "Yes"]];
+    const heightOptions = [["low", "Too low"], ["good", "Good height"], ["high", "Too high"]];
+    const playableOptions = [["notplayable", "Not playable"], ["someplay", "Somewhat playable"], ["playable", "Playable"]];
+    const experimentOptions = Object.entries(experimentLabels);
+
+    const playerNameInput = document.getElementById('playerName');
+    const emailInput = document.getElementById('email');
+    const buddyInput = document.getElementById('buddy');
+    const feedbackArea = document.getElementById('feedbackArea');
+
+    playerNameInput.addEventListener('input', e => { form.playerName = e.target.value; render(); });
+    emailInput.addEventListener('input', e => { form.email = e.target.value; form.sent = false; render(); });
+    buddyInput.addEventListener('input', e => { form.buddy = e.target.value; render(); });
+
+    function makeButtons(containerId, options, field, leftAlign = false) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      options.forEach(([value, label]) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'choice-btn' + (leftAlign ? ' left' : '') + (form[field] === value ? ' active' : '');
+        btn.textContent = label;
+        btn.addEventListener('click', () => {
+          form[field] = value;
+          form.sent = false;
+          render();
+        });
+        container.appendChild(btn);
+      });
+    }
+
+    function getFeedback() {
+      if (!form.position || !form.height || !form.playable) return null;
+      return outcomeFeedback[`${form.position}_${form.height}_${form.playable}`] || null;
+    }
+
+    function getVisualPath() {
+      if (form.height === 'low') return '<path d="M45 108 Q115 88 178 85 T286 80" fill="none" stroke="#0f172a" stroke-width="5" stroke-linecap="round" />';
+      if (form.height === 'good') return '<path d="M45 112 Q118 58 190 56 T286 60" fill="none" stroke="#0f172a" stroke-width="5" stroke-linecap="round" />';
+      if (form.height === 'high') return '<path d="M45 114 Q125 18 196 32 T286 42" fill="none" stroke="#0f172a" stroke-width="5" stroke-linecap="round" />';
+      return '';
+    }
+
+    function getControlIndicator() {
+      if (form.playable === 'notplayable') return { width: 50, label: 'hard to use' };
+      if (form.playable === 'someplay') return { width: 95, label: 'partly usable' };
+      return { width: 140, label: 'playable' };
+    }
+
+    function handleEmail() {
+      const feedback = getFeedback();
+      if (!feedback || !form.email) return;
+      const subject = encodeURIComponent(`${form.playerName || 'Your'} Volleyball Receiving Check`);
+      const body = encodeURIComponent(
+`Player: ${form.playerName || '-'}
+Buddy/Coach: ${form.buddy || '-'}
+
+What happened:
+- Position to receive: ${feedback.position}
+- Pass height: ${feedback.height}
+- Playability: ${feedback.playable}
+
+So what:
+${feedback.meaning}
+
+Now what:
+${feedback.experiment}
+
+My focus:
+${form.experiment ? experimentLabels[form.experiment] + (form.experiment === 'position' ? ' — move and get ready earlier' : form.experiment === 'height' ? ' — give the pass a more useful height' : ' — keep the ball more usable for the next touch') : '-'}
+
+Reflection:
+${form.experiment ? reflectionPrompts[form.experiment] : 'What will you change on your next receive?'}
+
+Next goal:
+${feedback.goal}`);
+      window.location.href = `mailto:${form.email}?subject=${subject}&body=${body}`;
+      form.sent = true;
+      render();
+    }
+
+    function render() {
+      makeButtons('positionBtns', positionOptions, 'position');
+      makeButtons('heightBtns', heightOptions, 'height');
+      makeButtons('playableBtns', playableOptions, 'playable');
+      makeButtons('experimentBtns', experimentOptions, 'experiment', true);
+
+      const feedback = getFeedback();
+      if (!feedback) {
+        feedbackArea.innerHTML = '<div class="empty">Select the receiving outcome to generate feedback.</div>';
+        return;
+      }
+
+      const control = getControlIndicator();
+      const playerLine = `${form.playerName || 'Player'}${form.buddy ? ' • observed by ' + form.buddy : ''}`;
+      const myExperiment = form.experiment
+        ? {
+            position: 'I will test moving into position earlier before I receive the ball.',
+            height: 'I will test giving the pass a more useful height for the next touch.',
+            playable: 'I will test keeping the ball more playable and under control.',
+          }[form.experiment]
+        : 'Choose one improvement focus.';
+      const reflection = form.experiment
+        ? reflectionPrompts[form.experiment]
+        : 'What will you change on your next receive?';
+
+      feedbackArea.innerHTML = `
+        <div class="feedback-top">
+          <div style="font-size:22px;font-weight:700;">${feedback.title}</div>
+          <div class="small muted" style="margin-top:4px;">${playerLine}</div>
+          <div class="mini-card">
+            <div class="section-title" style="margin-bottom:10px;">Simple visual</div>
+            <svg viewBox="0 0 320 170" aria-label="Receive path visual">
+              <line x1="0" y1="132" x2="320" y2="132" stroke="#cbd5e1" stroke-width="3" />
+              <circle cx="44" cy="114" r="6" fill="#0f172a" />
+              ${getVisualPath()}
+              <rect x="38" y="146" width="${control.width}" height="10" rx="5" fill="#334155"></rect>
+              <rect x="38" y="146" width="170" height="10" rx="5" fill="none" stroke="#cbd5e1" stroke-width="2"></rect>
+              <text x="38" y="166" font-size="11" fill="#475569">${control.label}</text>
+              <text x="224" y="58" font-size="11" fill="#475569">target area</text>
+              <rect x="220" y="64" width="48" height="34" rx="6" fill="none" stroke="#94a3b8" stroke-dasharray="4 3" stroke-width="2"></rect>
+            </svg>
+          </div>
+        </div>
+
+        <div class="feedback-blocks">
+          <div class="feedback-block">
+            <h3>What</h3>
+            <p>The player was <strong>${feedback.position}</strong> to receive. The pass height was <strong>${feedback.height}</strong> and the ball was <strong>${feedback.playable}</strong>.</p>
+          </div>
+          <div class="feedback-block">
+            <h3>So what</h3>
+            <p>${feedback.meaning}</p>
+          </div>
+          <div class="feedback-block">
+            <h3>Now what</h3>
+            <p>${feedback.experiment}</p>
+          </div>
+          <div class="feedback-block">
+            <h3>My focus</h3>
+            <p>${myExperiment}</p>
+          </div>
+          <div class="feedback-block">
+            <h3>Reflection prompt</h3>
+            <p>${reflection}</p>
+          </div>
+          <div class="feedback-block">
+            <h3>Next goal</h3>
+            <p>${feedback.goal}</p>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="primary" id="emailBtn" ${form.email ? '' : 'disabled'}>Send to email</button>
+          <button class="primary" id="resetBtn" style="background:#e2e8f0;color:#0f172a;">Reset</button>
+          ${form.sent ? '<div class="notice">Your email app has been opened with the feedback draft.</div>' : ''}
+        </div>
+      `;
+
+      document.getElementById('emailBtn').addEventListener('click', handleEmail);
+      document.getElementById('resetBtn').addEventListener('click', resetForm);
+    }
+
+    function resetForm() {
+      form.playerName = '';
+      form.email = '';
+      form.buddy = '';
+      form.position = '';
+      form.height = '';
+      form.playable = '';
+      form.experiment = '';
+      form.sent = false;
+      playerNameInput.value = '';
+      emailInput.value = '';
+      buddyInput.value = '';
+      render();
+    }
+
+    render();
+  </script>
+</body>
+</html>
